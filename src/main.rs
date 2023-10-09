@@ -423,7 +423,7 @@ fn parse_args(
                 println!("Starting download of {}", name);
                 let pb = ProgressBar::new(extra.content_length().unwrap());
                 pb.set_style(ProgressStyle::default_bar()
-                                         .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})")
+                                         .template("{spinner:.green} [{elapsed_precise}] [{bar:40.cyan/blue}] {bytes}/{total_bytes} ({eta})").unwrap()
                                          .progress_chars("#>-"));
                 let mut pb_read = pb.wrap_read(real_response);
                 let mut file = File::create(n_path).expect("Couldn't create file");
