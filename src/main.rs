@@ -198,15 +198,20 @@ fn parse_args(
                     let e = search_results.unwrap().products;
                     if !options.first {
                         if e.len() > 0 {
-                            let select = Select::new();
-                            let selects =
-                                select.with_prompt("Select a game to download:").default(0);
+                            let mut items: Vec<String> = vec![];
                             for pd in e.iter() {
-                                selects.clone().item(format!("{} - {}", pd.title, pd.id).as_str());
+                                items.push(format!("{} - {}", pd.title, pd.id));
                             }
-                            let i = selects.interact().expect("Couldn't pick game");
+
+                            let select = Select::new();
+                            let selection = select
+                                .with_prompt("Select a game to download:")
+                                .default(0)
+                                .items(&items)
+                                .interact().expect("Couldn't pick game");
+
                             info!("Fetching game details");
-                            let details = gog.get_game_details(e[i].id).unwrap();
+                            let details = gog.get_game_details(e[selection].id).unwrap();
                             let pname = details.title.clone();
                             info!("Beginning download process");
                             let (name, downloaded_windows) =
