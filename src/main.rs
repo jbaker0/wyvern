@@ -203,8 +203,8 @@ fn parse_args(
                     let e = search_results.unwrap().products;
                     if !options.first {
                         if e.len() > 0 {
-                            let mut select = Select::new();
-                            let mut selects =
+                            let select = Select::new();
+                            let selects =
                                 select.with_prompt("Select a game to download:").default(0);
                             for pd in e.iter() {
                                 selects.clone().item(format!("{} - {}", pd.title, pd.id).as_str());
@@ -296,7 +296,7 @@ fn parse_args(
             id,
             output,
         } => {
-            let mut details: GameDetails;
+            let details: GameDetails;
             if let Some(search) = game {
                 if let Ok(results) =
                     gog.get_filtered_products(FilterParams::from_one(Search(search.clone())))
@@ -307,8 +307,8 @@ fn parse_args(
                     }
                     let mut i = 0;
                     if !first {
-                        let mut selects = Select::new();
-                        let mut select =
+                        let selects = Select::new();
+                        let select =
                             selects.with_prompt("Select a game to download extras from:");
                         for pd in e.iter() {
                             select.clone().item(format!("{} - {}", pd.title, pd.id).as_str());
@@ -345,8 +345,8 @@ fn parse_args(
             }
             let mut picked: Vec<usize> = vec![];
             if !all && slug.is_none() {
-                let mut check = MultiSelect::new();
-                let mut checks = check.with_prompt("Pick the extras you want to download");
+                let check = MultiSelect::new();
+                let checks = check.with_prompt("Pick the extras you want to download");
                 for ex in details.extras.iter() {
                     checks.clone().item(&ex.name);
                 }
@@ -403,8 +403,8 @@ fn parse_args(
                 })
                 .collect();
             for extra in extra_responses.into_iter() {
-                let mut extra = extra.expect("Couldn't fetch extra");
-                let mut real_response = gog
+                let extra = extra.expect("Couldn't fetch extra");
+                let real_response = gog
                     .client_noredirect
                     .borrow()
                     .get(extra.url().clone())

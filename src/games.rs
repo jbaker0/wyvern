@@ -1,4 +1,4 @@
-use crate::*;
+
 pub mod update {
     use crate::*;
     use rayon::prelude::*;
@@ -24,7 +24,7 @@ pub mod update {
                 }
                 let details = gog.get_game_details(product.products[0].id).unwrap();
                 info!("Getting game's linux downloads");
-                let mut downloads;
+                let downloads;
                 if dlc {
                     info!("Using DLC to update");
                     downloads = details.all(true);
@@ -219,10 +219,10 @@ pub mod download {
         for idx in 0..count {
             let ref tok = gog.token.borrow();
             if tok.is_expired() {
-                let gog = Gog::new(tok.refresh()?);
+                let _gog = Gog::new(tok.refresh()?);
             }
             let mut responses = gog.download_game(vec![downloads[idx].clone()]);
-            let mut response = responses.remove(0);
+            let response = responses.remove(0);
             if response.is_err() {
                 println!(
                     "Error downloading file. Error message:{}",
@@ -270,8 +270,8 @@ pub mod download {
                         name = name + "." + &extension.to_string_lossy().to_string();
                     }
                 }
-                let mut i = 1;
-                let mut name_path = PathBuf::from(&name);
+                let _i = 1;
+                let name_path = PathBuf::from(&name);
                 let filename = name_path.file_name().unwrap().to_str().unwrap().to_string();
                 if name_path.exists() {
                     error!("A file named {} already exists. Skipping this file.", filename);
@@ -281,11 +281,11 @@ pub mod download {
                 names[idx] = name.clone();
                 let temp_name = name.clone() + ".tmp";
                 if options.resume {
-                    if let Ok(mut meta) = fs::metadata(&temp_name) {
+                    if let Ok(meta) = fs::metadata(&temp_name) {
                         if meta.len() >= total_size {
                             println!("Resuming {}, {} of {}", name, idx + 1, count);
                             pb.set_position(meta.len());
-                            let mut fd = OpenOptions::new().append(true).open(&temp_name)?;
+                            let fd = OpenOptions::new().append(true).open(&temp_name)?;
                             let handler = WriteHandler {
                                 writer: fd,
                                 pb: Some(pb),

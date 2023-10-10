@@ -1,6 +1,6 @@
 /// This module provides wyvern's interactive mode, which lets the user use wyvern through a text-based GUI instead of by running single commands
 use args::*;
-use curl::multi::Multi;
+
 use crate::parse_args;
 use dialoguer::*;
 use gog::gog::FilterParam::*;
@@ -25,8 +25,8 @@ pub fn interactive(gog: Gog, sync_saves: Option<String>) -> Gog {
                     .expect("Couldn't fetch games");
                 games.sort_by(|a, b| a.title.partial_cmp(&b.title).unwrap());
                 if options[pick] == "Download" {
-                    let mut check = MultiSelect::new();
-                    let mut picks = check.with_prompt("Select games to download");
+                    let check = MultiSelect::new();
+                    let picks = check.with_prompt("Select games to download");
                     for g in games.iter() {
                         picks.clone().item(g.title.as_str());
                     }
@@ -55,8 +55,8 @@ pub fn interactive(gog: Gog, sync_saves: Option<String>) -> Gog {
                 } else
                 // Extras
                 {
-                    let mut select = Select::new();
-                    let mut pick = select.with_prompt("Select game to download extras from");
+                    let select = Select::new();
+                    let pick = select.with_prompt("Select game to download extras from");
                     for g in games.iter() {
                         pick.clone().item(g.title.as_str());
                     }

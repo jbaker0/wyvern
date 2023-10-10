@@ -2,7 +2,7 @@ use curl::easy::{Handler, WriteError};
 use fs::File;
 use fs::OpenOptions;
 use gog::token::Token;
-use indicatif::{ProgressBar, ProgressStyle};
+use indicatif::{ProgressBar};
 use serde_json;
 use std::collections::HashMap;
 use std::default::Default;

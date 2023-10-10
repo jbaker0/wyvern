@@ -18,7 +18,7 @@ pub fn parse_args(gog: gog::Gog, args: ::args::Wyvern) -> gog::Gog {
         Connect(ListConnect { claim, quiet, json }) => {
             let status = gog.connect_status(uid);
             if status.is_ok() {
-                let mut items = status.unwrap().items;
+                let items = status.unwrap().items;
                 let mut count_hidden = 0;
                 let games: Vec<(String, ConnectGame)> = items
                     .into_iter()

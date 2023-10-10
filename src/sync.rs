@@ -35,7 +35,7 @@ pub fn parse_args(gog: Gog, sync_saves: Option<String>, args: ::args::Wyvern) ->
                         let id = details[0].id;
                         let savedb_path = PathBuf::from(sync_saves.clone()).join("savedb.json");
                         let mut save_db = SaveDB::load(&savedb_path).unwrap();
-                        let mut path: PathBuf;
+                        let path: PathBuf;
                         if save_db.saves.contains_key(&format!("{}", id)) {
                             info!("Savedb has path to saves confgured already");
                             path = PathBuf::from(
@@ -133,7 +133,7 @@ pub fn parse_args(gog: Gog, sync_saves: Option<String>, args: ::args::Wyvern) ->
                             savedb_path = sync_from.unwrap().join("savedb.json");
                         }
                         info!("Loading savedb");
-                        let mut save_db = SaveDB::load(&savedb_path).unwrap();
+                        let save_db = SaveDB::load(&savedb_path).unwrap();
                         if save_db.saves.contains_key(&format!("{}", id)) {
                             let save_path = PathBuf::from(sync_saves.clone())
                                 .join("saves")
@@ -223,7 +223,7 @@ pub fn parse_args(gog: Gog, sync_saves: Option<String>, args: ::args::Wyvern) ->
                 if let SaveType::GOG(id) = value.identifier {
                     folder_name = format!("gog_{}", id);
                 }
-                let mut dest_path = dpath.join("saves").join(&folder_name);
+                let dest_path = dpath.join("saves").join(&folder_name);
                 info!("Syncing file snow");
                 sync(save_path, dest_path, force, ignore_older);
                 println!("Synced {}", key);
