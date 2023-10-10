@@ -246,7 +246,7 @@ pub mod download {
                 let url = response.url().clone();
                 let final_name_encoded = url.path_segments().unwrap().last().unwrap().to_string();
                 let final_name =
-                    url::percent_encoding::percent_decode(&final_name_encoded.as_bytes())
+                    percent_encoding::percent_decode(&final_name_encoded.as_bytes())
                         .decode_utf8()
                         .unwrap()
                         .to_string();
