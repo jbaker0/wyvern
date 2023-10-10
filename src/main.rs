@@ -23,6 +23,7 @@ extern crate serde_json;
 extern crate url;
 extern crate walkdir;
 extern crate zip;
+extern crate anyhow;
 mod args;
 mod config;
 mod connect;
@@ -33,6 +34,7 @@ use args::Command::Download;
 use args::Command::*;
 use args::Wyvern;
 use args::{DownloadOptions, ShortcutOptions};
+use anyhow::Result;
 use config::*;
 use crc::crc32;
 use dialoguer::*;
@@ -56,10 +58,10 @@ use std::process::Command;
 use structopt::StructOpt;
 use walkdir::WalkDir;
 use {download::*, install::*, update::*};
-fn main() -> Result<(), ::std::io::Error> {
+fn main() -> Result<(), anyhow::Error> {
     #[cfg(not(debug_assertions))]
     setup_panic!();
-    let mut config: Config = confy::load("wyvern")?;
+    let mut config: Config = confy::load("wyvern", "wyvern")?;
     let args = Wyvern::from_args();
     args.verbose
         .setup_env_logger("wyvern")
@@ -70,7 +72,7 @@ fn main() -> Result<(), ::std::io::Error> {
             username,
             password,
         } => {
-            let mut config: Config = confy::load("wyvern")?;
+            let mut config: Config = confy::load("wyvern", "wyvern")?;
             if let Some(code) = code {
                 if let Ok(token) = Token::from_login_code(code) {
                     config.token = Some(token);
@@ -115,7 +117,7 @@ fn main() -> Result<(), ::std::io::Error> {
             } else {
                 config.token = Some(login());
             }
-            confy::store("wyvern", config)?;
+            confy::store("wyvern", "wyvern", config)?;
             ::std::process::exit(0);
         }
         _ => {}
@@ -141,7 +143,7 @@ fn main() -> Result<(), ::std::io::Error> {
                 .replace("~", dirs::home_dir().unwrap().to_str().unwrap()),
         );
     }
-    confy::store("wyvern", config)?;
+    confy::store("wyvern", "wyvern", config)?;
     parse_args(args, gog, sync_saves)?;
     Ok(())
 }
