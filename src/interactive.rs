@@ -1,5 +1,6 @@
 /// This module provides wyvern's interactive mode, which lets the user use wyvern through a text-based GUI instead of by running single commands
 use args::*;
+use curl::multi::Multi;
 use crate::parse_args;
 use dialoguer::*;
 use gog::gog::FilterParam::*;
@@ -24,14 +25,14 @@ pub fn interactive(gog: Gog, sync_saves: Option<String>) -> Gog {
                     .expect("Couldn't fetch games");
                 games.sort_by(|a, b| a.title.partial_cmp(&b.title).unwrap());
                 if options[pick] == "Download" {
-                    let mut check = Checkboxes::new();
-                    let mut picks = check.with_prompt("Select games to download").paged(true);
+                    let mut check = MultiSelect::new();
+                    let mut picks = check.with_prompt("Select games to download");
                     for g in games.iter() {
-                        picks.item(g.title.as_str());
+                        picks.clone().item(g.title.as_str());
                     }
                     let picked = picks.interact().unwrap();
-                    let install = Confirmation::new()
-                        .with_text("Do you want to install these games after they are downloaded?")
+                    let install = Confirm::new()
+                        .with_prompt("Do you want to install these games after they are downloaded?")
                         .interact()
                         .unwrap();
                     for g in picked {
@@ -55,9 +56,9 @@ pub fn interactive(gog: Gog, sync_saves: Option<String>) -> Gog {
                 // Extras
                 {
                     let mut select = Select::new();
-                    let mut pick = select.with_prompt("Select game to download extras from").paged(true);
+                    let mut pick = select.with_prompt("Select game to download extras from");
                     for g in games.iter() {
-                        pick.item(g.title.as_str());
+                        pick.clone().item(g.title.as_str());
                     }
                     let picked = pick.interact().unwrap();
                     let parsed = Wyvern::from_iter_safe(&vec![

@@ -81,7 +81,7 @@ fn main() -> Result<(), anyhow::Error> {
                 }
             } else if let Some(username) = username {
                 let password = password.unwrap_or_else(|| {
-                    let pword: String = PasswordInput::new()
+                    let pword: String = Password::new()
                         .with_prompt("Password")
                         .interact()
                         .unwrap();
@@ -207,7 +207,7 @@ fn parse_args(
                             let mut selects =
                                 select.with_prompt("Select a game to download:").default(0);
                             for pd in e.iter() {
-                                selects.item(format!("{} - {}", pd.title, pd.id).as_str());
+                                selects.clone().item(format!("{} - {}", pd.title, pd.id).as_str());
                             }
                             let i = selects.interact().expect("Couldn't pick game");
                             info!("Fetching game details");
@@ -311,7 +311,7 @@ fn parse_args(
                         let mut select =
                             selects.with_prompt("Select a game to download extras from:");
                         for pd in e.iter() {
-                            select.item(format!("{} - {}", pd.title, pd.id).as_str());
+                            select.clone().item(format!("{} - {}", pd.title, pd.id).as_str());
                         }
                         i = select.interact().unwrap();
                     }
@@ -345,10 +345,10 @@ fn parse_args(
             }
             let mut picked: Vec<usize> = vec![];
             if !all && slug.is_none() {
-                let mut check = Checkboxes::new();
+                let mut check = MultiSelect::new();
                 let mut checks = check.with_prompt("Pick the extras you want to download");
                 for ex in details.extras.iter() {
-                    checks.item(&ex.name);
+                    checks.clone().item(&ex.name);
                 }
                 picked = checks.interact().unwrap();
             }
@@ -528,7 +528,7 @@ pub fn login() -> Token {
                 .with_prompt("Email")
                 .interact()
                 .expect("Couldn't fetch username");
-            let password: String = PasswordInput::new()
+            let password: String = Password::new()
                 .with_prompt("Password")
                 .interact()
                 .expect("Couldn't fetch password");

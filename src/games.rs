@@ -172,7 +172,7 @@ pub mod download {
         } else {
             if !options.windows_auto && !options.windows_force {
                 info!("Asking user about downloading windows version");
-                if Confirmation::new().with_text("This game does not support linux! Would you like to download the windows version to run under wine?").interact().unwrap() {
+                if Confirm::new().with_prompt("This game does not support linux! Would you like to download the windows version to run under wine?").interact().unwrap() {
                 println!("Downloading windows files. Note: wyvern does not support automatic installation from windows games");
                 info!("Downloading windows downloads");
                 let name;
