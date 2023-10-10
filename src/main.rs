@@ -36,7 +36,7 @@ use args::Wyvern;
 use args::{DownloadOptions, ShortcutOptions};
 use anyhow::Result;
 use config::*;
-use crc::crc32;
+use crc::{Crc, CRC_32_ISCSI};
 use dialoguer::*;
 use games::*;
 use gog::extract::*;

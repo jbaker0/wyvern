@@ -63,7 +63,7 @@ pub mod update {
                                 let mut fd = File::open(&path)
                                     .expect(&format!("Couldn't open file {:?}", path));
                                 fd.read_to_end(&mut buffer).unwrap();
-                                let checksum = crc32::checksum_ieee(buffer.as_slice());
+                                let checksum = Crc::<u32>::new(&CRC_32_ISCSI).checksum(&buffer.as_slice());
                                 if checksum == file.crc32 {
                                     info!("File {:?} is the same", path);
                                     pb.inc(1);
