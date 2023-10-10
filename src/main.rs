@@ -2,6 +2,7 @@
 extern crate libeidolon;
 #[macro_use]
 extern crate structopt;
+#[macro_use]
 extern crate human_panic;
 #[macro_use]
 extern crate serde_derive;
@@ -33,24 +34,19 @@ use args::Command::Download;
 use args::Command::*;
 use args::Wyvern;
 use args::{DownloadOptions, ShortcutOptions};
+
 use anyhow::Result;
 use config::*;
 use crc::{Crc, CRC_32_ISCSI};
 use dialoguer::*;
 use games::*;
-use gog::extract::*;
-use gog::gog::{FilterParam::*, *};
-use gog::token::Token;
-use gog::Error;
-use gog::ErrorKind::*;
-use gog::Gog;
+use gog::{extract::*, token::Token, Error, ErrorKind::*, Gog, gog::{FilterParam::*, *}};
 use indicatif::{ProgressBar, ProgressStyle};
 use std::env::current_dir;
 use std::fs;
 use std::fs::*;
 use std::io;
-use std::io::SeekFrom::*;
-use std::io::Write;
+use std::io::{SeekFrom::*, Write};
 use std::os::unix::fs::PermissionsExt;
 use std::path::{Path, PathBuf};
 use std::process::Command;
