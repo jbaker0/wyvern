@@ -363,7 +363,7 @@ fn parse_args(
                 }
             }
 
-            let extra_responses: Vec<Result<reqwest::Response, Error>> = details
+            let extra_responses: Vec<anyhow::Result<reqwest::blocking::Response, anyhow::Error>> = details
                 .extras
                 .iter()
                 .enumerate()

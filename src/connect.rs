@@ -1,6 +1,5 @@
 use args::Command::Connect;
 use args::Connect::*;
-use gog::gog::connect::ConnectGameStatus::*;
 use gog::gog::connect::*;
 use gog::ErrorKind::*;
 pub fn parse_args(gog: gog::Gog, args: ::args::Wyvern) -> gog::Gog {
@@ -23,7 +22,7 @@ pub fn parse_args(gog: gog::Gog, args: ::args::Wyvern) -> gog::Gog {
                 let games: Vec<(String, ConnectGame)> = items
                     .into_iter()
                     .filter_map(|x| {
-                        if !claim || x.1.status == READY_TO_LINK {
+                        if !claim || x.1.status == ConnectGameStatus::ReadyToLink {
                             info!("Getting details for connect game");
                             let details = gog.product(vec![x.1.id], vec![]);
                             if details.is_ok() {
