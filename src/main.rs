@@ -2,7 +2,6 @@
 extern crate libeidolon;
 #[macro_use]
 extern crate structopt;
-#[macro_use]
 extern crate human_panic;
 #[macro_use]
 extern crate serde_derive;

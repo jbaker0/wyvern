@@ -74,13 +74,13 @@ pub mod update {
                                 pb.inc(1);
                                 return;
                             } else if is_dir {
-                                fs::create_dir_all(path);
+                                fs::create_dir_all(path).unwrap();
                                 pb.inc(1);
                                 return;
                             } else {
                                 pb.println(format!("File {:?} does not exist. Downloading.", path));
                             }
-                            fs::create_dir_all(path.parent().unwrap());
+                            fs::create_dir_all(path.parent().unwrap()).unwrap();
                             info!("Fetching file from installer");
                             let easy = Gog::download_request_range_at(
                                 access_token.as_str(),
@@ -446,7 +446,7 @@ pub mod install {
                                         }
                                     }
                                     if entry.path().is_dir() {
-                                        fs::create_dir_all(new_path);
+                                        fs::create_dir_all(new_path).unwrap();
                                     } else {
                                         info!("Moving file");
                                         fs::rename(entry.path(), new_path.as_path())
@@ -498,7 +498,7 @@ pub mod install {
                         info!("Getting file from archive");
                         let mut file = archive.by_index(i).unwrap();
                         let filtered_path = file
-                            .sanitized_name()
+                            .mangled_name()
                             .to_str()
                             .unwrap()
                             .replace("/noarch", "")
@@ -521,7 +521,6 @@ pub mod install {
                                 info!("Copying to file");
                                 io::copy(&mut file, &mut outfile).unwrap();
                             }
-                            use std::os::unix::fs::PermissionsExt;
                             if let Some(mode) = file.unix_mode() {
                                 info!("Setting permissions for file");
                                 fs::set_permissions(&outpath, fs::Permissions::from_mode(mode))
